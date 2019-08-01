@@ -11,7 +11,7 @@ predict_text = '中华人民共和国国务院总理周恩来在外交部长陈�
 text, length = process_data(predict_text, vocab)
 
 test_data = dict()
-test_data['inputs'] = [0] * 100
+test_data['input_ids'] = text.tolist()
 
 
 data = json.dumps({"signature_name": "ner", "instances": [test_data]})
