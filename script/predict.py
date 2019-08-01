@@ -16,6 +16,8 @@ save_load_utils.load_all_weights(predict_model, 'models/crf.h5', include_optimiz
 predict_text = '中华人民共和国国务院总理周恩来在外交部长陈毅的陪同下，连续访问了埃塞俄比亚等非洲10国以及阿尔巴尼亚'
 # predict_text = '我留言板球球群你们加下找我要回关'
 text, length = process_data(predict_text, vocab)
+print(text)
+
 raw = predict_model.predict(text)[0][-length:]
 result = [np.argmax(row) for row in raw]
 result_tags = [chunk_tags[i] for i in result]

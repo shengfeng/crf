@@ -47,6 +47,8 @@ def load_data():
     vocab = [w for w, f in iter(word_counts.items()) if f >= 2]
     chunk_tags = ['O', 'B-PER', 'I-PER', 'B-LOC', 'I-LOC', "B-ORG", "I-ORG"]
     
+    with open('models/config.pkl', 'wb') as outp:
+        pickle.dump((vocab, chunk_tags), outp)
     # save initial config data
     train = _process_data(train, vocab, chunk_tags)
     test = _process_data(test, vocab, chunk_tags)
