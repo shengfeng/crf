@@ -15,7 +15,7 @@ request = predict_pb2.PredictRequest()
 request.model_spec.name = 'ner-serving'
 request.model_spec.signature_name = 'ner'
 
-request.inputs['input_ids'].CopyFrom(tf.contrib.util.make_tensor_proto(np.zeros((0),   dtype=int).tolist(), shape=[1, 1, 100]))
+request.inputs['input_ids'].CopyFrom(tf.contrib.util.make_tensor_proto(np.zeros((0),   dtype=int).tolist(), shape=[1, 100]))
 # request.inputs['input_mask'].CopyFrom(tf.contrib.util.make_tensor_proto(np.zeros((60),   dtype=int).tolist(), shape=[1, 60]))
 # request.inputs['label_ids'].CopyFrom  (tf.contrib.util.make_tensor_proto([0], shape=[1, 1]))
 # request.inputs['segment_ids'].CopyFrom(tf.contrib.util.make_tensor_proto(np.zeros((60),   dtype=int).tolist(), shape=[1, 60]))
