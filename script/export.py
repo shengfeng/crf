@@ -7,7 +7,7 @@ from keras import backend as K
 # The export path contains the name and the version of the model
 tf.keras.backend.set_learning_phase(0)
 
-with open('../models/config.pkl', 'rb') as inp:
+with open('models/config.pkl', 'rb') as inp:
     (vocab, chunk_tags) = pickle.load(inp)
 
 VOCAB_SIZE = len(vocab)
@@ -22,11 +22,11 @@ predict_model = model.crf_model(VOCAB_SIZE, TAGS_NUMS)
 # And stored with the default serving key
 # model.save_model_to_serving(predict_model, "1")
 
-predict_model.load_weights('../models/crf.h5')
+predict_model.load_weights('models/crf.h5')
 legacy_init_op = tf.group(tf.tables_initializer())
 
 with K.get_session() as sess:
-    export_path = '../../serving/2'
+    export_path = 'ner_serving/3'
     builder = tf.saved_model.builder.SavedModelBuilder(export_path)
 
     signature_inputs = {

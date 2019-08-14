@@ -5,8 +5,9 @@ import os
 from keras import backend as K
 from keras.models import Sequential
 from keras.layers import Embedding, Bidirectional, LSTM
-from keras.layers import Dropout, TimeDistributed, Dense
+from keras.layers import Dropout, TimeDistributed, Dense, Input
 from keras_contrib.layers import CRF
+from keras.models import Model
 
 
 EMBEDDING_OUT_DIM = 128
@@ -15,15 +16,17 @@ HIDDEN_UNITS = 200
 DROPOUT_RATE = 0.3
 
 def crf_model(VOCAB_SIZE, TAGS_NUMS):
-    model = Sequential()
-    model.add(Embedding(VOCAB_SIZE, output_dim=EMBEDDING_OUT_DIM, mask_zero=True, input_length=TIME_STAMPS))
-    model.add(Bidirectional(LSTM(HIDDEN_UNITS, return_sequences=True)))
-    model.add(Dropout(DROPOUT_RATE))
-    model.add(Bidirectional(LSTM(HIDDEN_UNITS, return_sequences=True)))
-    model.add(Dropout(DROPOUT_RATE))
-    model.add(TimeDistributed(Dense(TAGS_NUMS)))
+    inputs = Input(shape=(TIME_STAMPS,))
+    x = Embedding(VOCAB_SIZE, output_dim=EMBEDDING_OUT_DIM, mask_zero=True)(inputs)
+    x = Bidirectional(LSTM(HIDDEN_UNITS, return_sequences=True))(x)
+    x = Dropout(DROPOUT_RATE)(x)
+    x = Bidirectional(LSTM(HIDDEN_UNITS, return_sequences=True))(x)
+    x = Dropout(DROPOUT_RATE)(x)
+    x = TimeDistributed(Dense(TAGS_NUMS))(x)
     crf = CRF(TAGS_NUMS, sparse_target=True)
-    model.add(crf)
+    predictions = crf(x)
+
+    model = Model(inputs=inputs, outputs=predictions)
     model.summary()
     model.compile('rmsprop', loss=crf.loss_function, metrics=[crf.accuracy])
     return model
